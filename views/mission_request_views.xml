@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <form string="Demande de mission">
                 <sheet>
+
                     <group>
                         <field name="employee_id"/>
                         <field name="department_id" readonly="1"/>
@@ -27,6 +28,11 @@
                     <!-- Bouton pour rejeter la demande de mission -->
                     <button name="action_reject" type="object" string="Rejeter"
                             attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+
+                    <!-- Nouveau bouton pour supprimer la demande de mission
+                    <button name="action_delete" type="object" string="Supprimer"
+                        attrs="{'invisible': [('state', '!=', 'draft')]}"/>-->
+
                 </footer>
             </form>
         </field>
@@ -50,7 +56,7 @@
     <menuitem id="menu_mission_root" name="Missions"/>
 
     <!-- Menu pour les demandes de missions -->
-    <menuitem id="menu_mission_requests" name="Demandes de missions" parent="menu_mission_root"/>
+    <menuitem id="menu_mission_requests" name="Demandes de missions" parent="menu_mission_root" action="action_mission_request"/>
 
     <!-- Action pour afficher les demandes de mission -->
     <record id="action_mission_request" model="ir.actions.act_window">
@@ -60,5 +66,6 @@
     </record>
 
     <!-- Menu pour accéder aux demandes de mission -->
-    <menuitem id="menu_mission_request_action" name="Toutes les demandes" parent="menu_mission_requests" action="action_mission_request"/>
 </odoo>
+
+<!--     <menuitem id="menu_mission_tracking" name="Suivi des missions" parent="menu_mission_root" action="action_mission_tracking"/>-->

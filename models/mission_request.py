@@ -1,5 +1,7 @@
 # models/mission_request.py
 from odoo import models, fields, api
+from odoo.odoo.exceptions import UserError
+
 
 class MissionRequest(models.Model):
     _name = 'mission.request'
@@ -50,6 +52,16 @@ class MissionRequest(models.Model):
         """Action pour rejeter la mission"""
         if self.state == 'draft':
             self.write({'state': 'refused'})
+
+    def action_delete(self):
+        """Action pour supprimer la demande de mission et les missions associées"""
+        if self.state == 'draft':
+            # Supprimer les enregistrements de suivi des missions associés
+            self.mission_tracking_id.unlink()
+            # Supprimer la demande de mission elle-même
+            self.unlink()
+        else:
+            raise UserError("Impossible de supprimer une demande de mission qui n'est pas en état 'Brouillon'.")
 
     @api.onchange('vehicle_type')
     def _onchange_vehicle_type(self):

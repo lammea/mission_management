@@ -14,13 +14,24 @@ class MissionTracking(models.Model):
         ('cancelled', 'Annulée')
     ], default='new', string="État", track_visibility='onchange')
 
-    mission_request_id = fields.Many2one('mission.request', string="Demande de mission", required=True)
+    employee_id = fields.Many2one('hr.employee', string="Employé", required=True)
+
+    mission_request_id = fields.Many2one('mission.request', string="Demande de mission", required=True, ondelete='cascade')
     mission_number = fields.Char(string="Numéro de mission", readonly=True, copy=False)
     date_start = fields.Date(string="Date de début")
     date_end = fields.Date(string="Date de fin")
     additional_fees = fields.Float(string="Frais supplémentaires")
     overtime_hours = fields.Float(string="Heures supplémentaires")
+
     total_fees = fields.Float(string="Total des frais", compute="_compute_total_fees", store=True)
+
+    def action_delete(self):
+        """Action pour supprimer la demande de mission et les missions associées"""
+        # Supprimer d'abord les enregistrements de suivi des missions
+        if self.mission_tracking_id:
+            self.mission_tracking_id.unlink()
+        # Ensuite, supprimer la demande de mission elle-même
+        self.unlink()
 
     @api.depends('additional_fees', 'overtime_hours')
     def _compute_total_fees(self):
