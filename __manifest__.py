@@ -11,9 +11,16 @@
         'views/mission_request_views.xml',
         'views/mission_tracking_views.xml',
         'data/mission_tracking_sequence.xml',
-    #    'views/report_mission_template.xml',  # Ajouter le modèle de rapport
+        'views/report_mission_template.xml',  # Ajouter le modèle de rapport
 
     ],
+'assets': {
+    'web.report_assets_common': [
+        'web/static/src/scss/report.scss',
+    ],
+},
+
+
     'installable': True,
     'application': True,
 }

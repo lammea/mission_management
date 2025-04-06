@@ -1,9 +1,10 @@
+# mission_management/report/report_mission.py
 
-from odoo import models, fields, api
+from odoo import models, api
 
-class MissionTrackingReport(models.AbstractModel):
+class ReportMission(models.AbstractModel):
     _name = 'report.mission_management.report_mission'
-    _description = 'Rapport de Bon de Mission'
+    _description = 'Rapport PDF Bon de Mission'
 
     @api.model
     def _get_report_values(self, docids, data=None):
@@ -12,5 +13,4 @@ class MissionTrackingReport(models.AbstractModel):
             'doc_ids': docids,
             'doc_model': 'mission.tracking',
             'docs': docs,
-            'total_fees': sum(doc.total_fees for doc in docs)
         }

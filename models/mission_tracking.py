@@ -1,5 +1,6 @@
 from odoo import models, fields, api
 import logging
+
 _logger = logging.getLogger(__name__)
 
 class MissionTracking(models.Model):
@@ -29,7 +30,7 @@ class MissionTracking(models.Model):
 
     @api.model
     def create(self, vals):
-        # Attribuer automatiquement un numéro séquentiel
+        # Attribuer automatiquement un numéro séquentiel si nécessaire
         if not vals.get('mission_number'):
             vals['mission_number'] = self.env['ir.sequence'].next_by_code('mission.tracking.sequence')
         return super(MissionTracking, self).create(vals)
@@ -40,6 +41,10 @@ class MissionTracking(models.Model):
     def action_cancel(self):
         self.write({'state': 'cancelled'})
 
+    def print_mission_report(self):
+        # Cette méthode est appelée pour générer le rapport PDF
+        return self.env.ref('mission_management.action_mission_report').report_action(self)
+
     def _get_report_values(self, docids, data=None):
         # Récupérer l'action du rapport
         report = self.env['ir.actions.report']._get_report_from_name('mission_management.report_mission')
@@ -47,18 +52,16 @@ class MissionTracking(models.Model):
         # Récupérer les enregistrements associés aux docids
         docs = self.env[report.model].browse(docids)
 
-        # Assurez-vous que `docs` contient les enregistrements attendus
+        # Vérifier si les docs sont récupérés correctement
         if not docs:
             raise ValueError("Les enregistrements sont introuvables pour les docids spécifiés.")
 
-        # Vérification du contenu de docs (optionnel pour débogage)
-        _logger = logging.getLogger(__name__)
         _logger.info("Enregistrements trouvés pour docids: %s", docs)
 
         return {
-            'doc': docs,  # Assurez-vous que 'doc' contient les bons enregistrements
-            'data': data,  # Si vous avez d'autres données à passer, vous pouvez les inclure
+            'doc_ids': docids,  # Transmettre docids pour être utilisés dans le rapport
+            'doc_model': 'mission.tracking',  # Assure-toi que le modèle correspond
+            'docs': docs,  # Utiliser 'docs' plutôt que 'doc'
+            'data': data,  # Si vous avez d'autres données à passer, vous pouvez les inclure ici
         }
-
-
 

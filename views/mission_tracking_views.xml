@@ -20,8 +20,12 @@
                             attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
                     <button name="action_cancel" type="object" string="Annuler"
                             attrs="{'invisible': [('state', 'not in', ('new', 'in_progress'))]}"/>
-                    <button name="%(action_print_mission_report)d" type="action" string="Imprimer Bon de Mission"
-                            attrs="{'invisible': [('state', '!=', 'completed')]}"/>
+                    <button name="print_mission_report"
+        string="Imprimer Bon de Mission"
+        type="object"
+        class="btn btn-primary"
+        attrs="{'invisible': [('state', '!=', 'done')]}"/>
+
                 </header>
 
                 <sheet>
