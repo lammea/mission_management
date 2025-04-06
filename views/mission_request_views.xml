@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Vue formulaire pour la demande de mission -->
+    <record id="view_mission_request_form" model="ir.ui.view">
+        <field name="name">mission.request.form</field>
+        <field name="model">mission.request</field>
+        <field name="arch" type="xml">
+            <form string="Demande de mission">
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="department_id" readonly="1"/>
+                        <field name="phone" readonly="1"/>
+                        <field name="email" readonly="1"/>
+                        <field name="vehicle_type"/>
+                        <field name="vehicle_id" attrs="{'invisible': [('vehicle_type', '!=', 'entreprise')]}"/>
+                        <field name="mission_reason"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="state" readonly="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <!-- Bouton pour accepter la demande de mission -->
+                    <button name="action_approve" type="object" string="Accepter"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                    <!-- Bouton pour rejeter la demande de mission -->
+                    <button name="action_reject" type="object" string="Rejeter"
+                            attrs="{'invisible': [('state', '!=', 'draft')]}"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue arbre pour afficher la liste des demandes de mission -->
+    <record id="view_mission_request_tree" model="ir.ui.view">
+        <field name="name">mission.request.tree</field>
+        <field name="model">mission.request</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_id"/>
+                <field name="mission_reason"/>
+                <field name="date_start"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Définir le menu des missions -->
+    <menuitem id="menu_mission_root" name="Missions"/>
+
+    <!-- Menu pour les demandes de missions -->
+    <menuitem id="menu_mission_requests" name="Demandes de missions" parent="menu_mission_root"/>
+
+    <!-- Action pour afficher les demandes de mission -->
+    <record id="action_mission_request" model="ir.actions.act_window">
+        <field name="name">Demandes de missions</field>
+        <field name="res_model">mission.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu pour accéder aux demandes de mission -->
+    <menuitem id="menu_mission_request_action" name="Toutes les demandes" parent="menu_mission_requests" action="action_mission_request"/>
+</odoo>

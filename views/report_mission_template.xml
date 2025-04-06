@@ -1,0 +1,98 @@
+<odoo>
+    <!-- Template QWeb (Vue) -->
+    <record id="report_mission_view" model="ir.ui.view">
+        <field name="name">mission_management.report_mission</field>
+        <field name="model">mission.tracking</field>
+        <field name="arch" type="xml">
+            <template id="report_mission">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <h2>Bon de Mission</h2>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td><strong>Numéro de Mission</strong></td>
+                                <td><t t-esc="doc.mission_number"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Employé</strong></td>
+                                <td><t t-esc="doc.mission_request_id.employee_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Motif de la mission</strong></td>
+                                <td><t t-esc="doc.mission_request_id.mission_reason"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Date de début</strong></td>
+                                <td><t t-esc="doc.date_start"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Date de fin</strong></td>
+                                <td><t t-esc="doc.date_end"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Frais supplémentaires</strong></td>
+                                <td><t t-esc="doc.additional_fees"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Heures supplémentaires</strong></td>
+                                <td><t t-esc="doc.overtime_hours"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Total des frais</strong></td>
+                                <td><t t-esc="doc.total_fees"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </template>
+        </field>
+    </record>
+
+    <!-- Action de rapport PDF -->
+    <record id="action_print_mission_report" model="ir.actions.report">
+        <field name="name">Mission Report</field>
+        <field name="model">mission.tracking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">mission_management.report_mission</field> <!-- correspond au template id -->
+        <field name="binding_model_id" ref="model_mission_tracking"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Boutons de la vue formulaire -->
+    <record id="view_mission_tracking_form" model="ir.ui.view">
+        <field name="name">mission.tracking.form</field>
+        <field name="model">mission.tracking</field>
+        <field name="arch" type="xml">
+            <form string="Suivi de la mission">
+                <header>
+                    <button name="action_complete" type="object" string="Terminer"
+                            attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                    <button name="action_cancel" type="object" string="Annuler"
+                            attrs="{'invisible': [('state', 'not in', ('new', 'in_progress'))]}"/>
+                    <button name="%(action_print_mission_report)d" type="action" string="Imprimer Bon de Mission"
+                            attrs="{'invisible': [('state', '!=', 'completed')]}"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="mission_request_id"/>
+                        <field name="state"/>
+                        <field name="mission_number"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="additional_fees"/>
+                        <field name="overtime_hours"/>
+                        <field name="total_fees"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_complete" type="object" string="Terminer"
+                            attrs="{'invisible': [('state', '!=', 'in_progress')]}"/>
+                    <button name="action_cancel" type="object" string="Annuler"
+                            attrs="{'invisible': [('state', 'not in', ('new', 'in_progress'))]}"/>
+                    <button name="%(action_print_mission_report)d" type="action" string="Imprimer Bon de Mission"
+                            attrs="{'invisible': [('state', '!=', 'completed')]}"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
