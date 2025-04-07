@@ -8,6 +8,7 @@
 
     # data files always loaded at installation
     'data': [
+'security/ir.model.access.csv',
         'views/mission_request_views.xml',
         'views/mission_tracking_views.xml',
         'data/mission_tracking_sequence.xml',
