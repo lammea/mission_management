@@ -1,14 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <data noupdate="1">
-        <!-- Déclaration de la séquence -->
-        <record id="seq_mission_tracking" model="ir.sequence">
-    <field name="name">Numéro de Mission</field>
-    <field name="code">mission.tracking.sequence</field>
-    <field name="padding">5</field>
-    <field name="prefix">M-</field>
-    <field name="sequence_id" eval="5"/>
-    <field name="active" eval="True"/>
-</record>
-
-    </data>
+    <record id="seq_mission_tracking" model="ir.sequence">
+        <field name="name">Numéro de Mission</field>
+        <field name="code">mission.tracking.sequence</field>
+        <field name="padding">5</field>
+        <field name="prefix">M-</field>
+        <field name="active" eval="True"/>
+    </record>
 </odoo>
